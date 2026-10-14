@@ -1,0 +1,22 @@
+[package]
+name = "fieldnote-engine"
+version = "0.1.0"
+edition = "2021"
+description = "Offline-first, CRDT-based note sync engine for field researchers"
+default-run = "fieldnote-server"
+
+[lib]
+name = "fieldnote"
+path = "src/lib.rs"
+
+[[bin]]
+name = "fieldnote-server"
+path = "src/main.rs"
+
+[dependencies]
+axum = "0.8"
+rusqlite = { version = "0.40", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "signal"] }
+tower-http = { version = "0.7", features = ["cors", "fs"] }

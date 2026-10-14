@@ -1,0 +1,13 @@
+{
+  "name": "fieldnote",
+  "private": true,
+  "description": "Offline-first, CRDT-based note sync for field researchers",
+  "scripts": {
+    "setup": "npm --prefix app install",
+    "dev": "node scripts/dev.mjs",
+    "build": "npm --prefix app run build && cd engine && (cargo build --release || ~/.cargo/bin/cargo build --release)",
+    "start": "npm run build && cd engine && ./target/release/fieldnote-server",
+    "test": "cd engine && (cargo test || ~/.cargo/bin/cargo test)",
+    "typecheck": "npm --prefix app run typecheck"
+  }
+}

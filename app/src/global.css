@@ -1,0 +1,118 @@
+:root {
+  --font-ui: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg, #06080f);
+  color: var(--text, #ece6d6);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+#root { display: flex; }
+
+::selection { background: var(--accent-soft); color: var(--text); }
+
+/* One focus ring everywhere, keyboard only. */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--focus) !important;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+textarea:focus-visible, input:focus-visible { outline-offset: 0; }
+
+.fn-skip {
+  position: fixed; left: 12px; top: -48px; z-index: 1000;
+  padding: 8px 14px; border-radius: 8px;
+  background: var(--accent); color: var(--on-accent);
+  font: 500 14px/20px var(--font-ui); text-decoration: none;
+  transition: top 160ms var(--ease-out);
+}
+.fn-skip:focus { top: 12px; }
+
+/* Grain, as on printed posters. Fixed, non-interactive, cheap. */
+.fn-grain::after {
+  content: ""; position: fixed; inset: -50%; z-index: 999; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .07; mix-blend-mode: overlay;
+}
+[data-theme="light"] .fn-grain::after { opacity: .12; mix-blend-mode: multiply; }
+
+/* Scrollbars that match the surface. */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; border: 3px solid transparent; background-clip: content-box; }
+
+/* Native controls follow the theme in dark mode. */
+select, .fn-select {
+  appearance: none; -webkit-appearance: none;
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-height: 36px;
+  padding: 0 34px 0 12px;
+  font: 400 14px/1 var(--font-ui);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23888' stroke-width='1.6'%3E%3Cpath d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+}
+select:hover { border-color: var(--border-strong); }
+select option { background-color: var(--surface); color: var(--text); }
+
+input[type="range"] { accent-color: var(--accent); width: 100%; height: 24px; cursor: pointer; }
+
+/* Inputs inside a styled wrapper: the wrapper shows focus, not the input. */
+#editor:focus-visible, #note-title:focus-visible, #cmd-input:focus-visible, [data-field] input:focus-visible { outline: none !important; }
+[data-field]:focus-within { border-color: var(--focus) !important; box-shadow: 0 0 0 1px var(--focus); }
+#editor { tab-size: 2; }
+
+/* 16px on touch screens so iOS never zooms. */
+@media (pointer: coarse) { input, textarea, select { font-size: 16px !important; } }
+
+.fn-spin { animation: fn-spin 900ms linear infinite; }
+@keyframes fn-spin { to { transform: rotate(360deg); } }
+
+.fn-sun-rays { animation: fn-spin 60s linear infinite; }
+
+a { color: inherit; }
+
+[data-motion="reduce"] *, [data-motion="reduce"] *::before, [data-motion="reduce"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+.fn-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Labels in the Three.js graph are DOM nodes (CSS2DRenderer). */
+.fn-graph-label {
+  font: 500 12px/1 var(--font-ui);
+  color: var(--text-muted);
+  padding: 3px 6px; border-radius: 5px;
+  white-space: nowrap; pointer-events: none;
+  transition: color 150ms, background-color 150ms, opacity 200ms;
+  text-shadow: 0 1px 2px var(--bg);
+}
+.fn-graph-label[data-hot="1"] { color: var(--on-accent); background: var(--accent); text-shadow: none; }
+.fn-graph-label[data-dim="1"] { opacity: .25; }
+.fn-graph-label[data-tag="1"] { font-family: var(--font-mono); color: var(--ground-ink); }
+
+
+mark { background: var(--accent-soft); color: inherit; border-radius: 3px; padding: 0 2px; }

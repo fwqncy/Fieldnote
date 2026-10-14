@@ -1,0 +1,38 @@
+{
+  "name": "fieldnote-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource/big-shoulders-display": "^5.3.0",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "gsap": "^3.15.0",
+    "lucide-react": "^1.56.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-native-web": "^0.21.4",
+    "sql.js": "^1.14.2",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/react-native": "^0.72.8",
+    "@types/sql.js": "^1.4.11",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "^5.6.3",
+    "vite": "^4.5.14"
+  },
+  "overrides": {
+    "@types/react": "$@types/react"
+  }
+}
