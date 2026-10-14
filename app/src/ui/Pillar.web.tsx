@@ -185,8 +185,8 @@ export function ColumnFrame({ children, label }: { children: React.ReactNode; la
         flexShrink: 0,
         background: [
           'repeating-linear-gradient(90deg, rgba(0,0,0,0) 0 3px, rgba(40,32,20,.28) 3px 4px, rgba(255,255,255,.35) 4px 5px, rgba(0,0,0,0) 5px 6px)',
-          // Light falls from the left, so the right flank sits in shadow.
-          side === 'left' ? 'linear-gradient(90deg, rgba(255,255,255,.3), rgba(0,0,0,.06))' : 'linear-gradient(90deg, rgba(0,0,0,.04), rgba(0,0,0,.34))',
+          // Both flanks share the same soft shading, mirrored, so the column is symmetric.
+          `linear-gradient(${side === 'left' ? 90 : 270}deg, rgba(255,255,255,.3), rgba(0,0,0,.06))`,
           'var(--marble)',
         ].join(','),
       }}
@@ -209,8 +209,15 @@ export function ColumnFrame({ children, label }: { children: React.ReactNode; la
 }
 
 function IonicCapital() {
-  // Eggs run only between the volutes so none is cut by a scroll.
-  const eggs = Array.from({ length: 11 }, (_, i) => 86 + i * 22.8);
+  // Egg-and-dart follows the echinus' curve: each egg sits on the midline
+  // between its curved top (y 32→38→32) and bottom (y 62→66→62) edges,
+  // tilted to the slope, and only between the volutes.
+  const top = (x: number) => { const t = (x - 50) / 300; return 32 + 24 * t * (1 - t); };
+  const bottom = (x: number) => { const t = (x - 64) / 272; return 62 + 16 * t * (1 - t); };
+  const mid = (x: number) => (top(x) + bottom(x)) / 2 + 0.5;
+  const tilt = (x: number) => (Math.atan2(mid(x + 1) - mid(x - 1), 2) * 180) / Math.PI;
+  const step = 13.3;
+  const eggs = Array.from({ length: 19 }, (_, i) => 80 + i * step);
   return (
     <svg aria-hidden viewBox="0 0 400 92" width="100%" style={{ display: 'block' }}>
       {/* abacus */}
@@ -220,10 +227,12 @@ function IonicCapital() {
       <path d="M44 14 H356 V30 Q200 40 44 30 Z" fill="var(--marble)" stroke={INK} strokeWidth="1" />
       {/* echinus with egg-and-dart */}
       <path d="M50 32 Q200 44 350 32 L336 62 Q200 70 64 62 Z" fill="var(--marble)" stroke={INK} strokeWidth="1" />
-      {eggs.map((x) => (
+      {eggs.map((x, i) => (
         <g key={x}>
-          <ellipse cx={x} cy="48" rx="7" ry="9" fill="none" stroke={INK} strokeWidth="1" />
-          {x < 310 && <path d={`M${x + 11.4} 41 V57`} stroke={INK} strokeWidth="1" />}
+          <ellipse cx={x} cy={mid(x)} rx="4.4" ry="6.6" transform={`rotate(${tilt(x).toFixed(2)} ${x} ${mid(x).toFixed(2)})`} fill="none" stroke={INK} strokeWidth="1" />
+          {i < eggs.length - 1 && (
+            <path d={`M${x + step / 2} ${(mid(x + step / 2) - 5).toFixed(2)} L${x + step / 2} ${(mid(x + step / 2) + 5).toFixed(2)}`} stroke={INK} strokeWidth="1" />
+          )}
         </g>
       ))}
       {/* volutes */}
